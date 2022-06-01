@@ -16,64 +16,68 @@ namespace Revit.TestRunner
     {
         private RunnerController mController;
 
-        public Result OnStartup( UIControlledApplication application )
+        public Result OnStartup(UIControlledApplication application)
         {
-            Log.Info( $"Revit.TestRunner started v{Assembly.GetExecutingAssembly().GetName().Version} '{DateTime.Now}'" );
-            Log.Info( $"{Environment.OSVersion}, NetFX {Environment.Version}" );
-            Log.Debug( $"Log Directory '{Log.LogDirectory}'" );
-            Log.Debug( $"CurrentAppDomain.ApplicationBase '{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}'" );
+            Log.Info($"Revit.TestRunner started v{Assembly.GetExecutingAssembly().GetName().Version} '{DateTime.Now}'");
+            Log.Info($"{Environment.OSVersion}, NetFX {Environment.Version}");
+            Log.Debug($"Log Directory '{Log.LogDirectory}'");
+            Log.Debug($"CurrentAppDomain.ApplicationBase '{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}'");
 
-            RibbonPanel ribbonPanel = application.CreateRibbonPanel( "Testing" );
+            RibbonPanel ribbonPanel = application.CreateRibbonPanel("Testing");
 
-            string command = typeof( RunnerCommand ).FullName;
+            string command = typeof(RunnerCommand).FullName;
 
-            PushButtonData buttonData = new PushButtonData( command, "Open Runner", Assembly.GetExecutingAssembly().Location, command ) {
+            PushButtonData buttonData = new PushButtonData(command, "Open Runner", Assembly.GetExecutingAssembly().Location, command)
+            {
                 ToolTip = "Open the Test Runner Dialog\nStart Tests using the Revit API.",
-                Image = GetImage( "Testing.png", 16 ),
-                LargeImage = GetImage( "Testing.png", 32 ),
-                AvailabilityClassName = typeof( AvailableInStartScreen ).FullName
+                Image = GetImage("Testing.png", 16),
+                LargeImage = GetImage("Testing.png", 32),
+                AvailabilityClassName = typeof(AvailableInStartScreen).FullName
             };
 
-            ribbonPanel.AddItem( buttonData );
+            ribbonPanel.AddItem(buttonData);
 
             mController = new RunnerController();
-            mController.Start( application );
+            mController.Start(application);
 
             return Result.Succeeded;
         }
 
-        public Result OnShutdown( UIControlledApplication application )
+        public Result OnShutdown(UIControlledApplication application)
         {
             mController.Stop();
             return Result.Succeeded;
         }
 
-        private static ImageSource GetImage( string name, int size )
+        private static ImageSource GetImage(string name, int size)
         {
             ImageSource result = null;
 
-            try {
+            try
+            {
                 string ressource = "pack://application:,,,/Revit.TestRunner;component/Commands/Pic/" + name;
-                result = new BitmapImage( new Uri( ressource ) );
-                result = Thumbnail( result, size );
+                result = new BitmapImage(new Uri(ressource));
+                result = Thumbnail(result, size);
             }
-            catch {
+            catch
+            {
                 // ignore
             }
 
             return result;
         }
 
-        private static ImageSource Thumbnail( ImageSource source, int size )
+        private static ImageSource Thumbnail(ImageSource source, int size)
         {
-            Rect rect = new Rect( 0, 0, size, size );
+            Rect rect = new Rect(0, 0, size, size);
             DrawingVisual drawingVisual = new DrawingVisual();
-            using( DrawingContext drawingContext = drawingVisual.RenderOpen() ) {
-                drawingContext.DrawImage( source, rect );
+            using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+            {
+                drawingContext.DrawImage(source, rect);
             }
 
-            RenderTargetBitmap resizedImage = new RenderTargetBitmap( (int)rect.Width, (int)rect.Height, 96, 96, PixelFormats.Default );
-            resizedImage.Render( drawingVisual );
+            RenderTargetBitmap resizedImage = new RenderTargetBitmap((int)rect.Width, (int)rect.Height, 96, 96, PixelFormats.Default);
+            resizedImage.Render(drawingVisual);
 
             return resizedImage;
         }

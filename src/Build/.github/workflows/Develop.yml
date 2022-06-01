@@ -1,0 +1,32 @@
+# ------------------------------------------------------------------------------
+# Develop.yml
+# ------------------------------------------------------------------------------
+
+name: Develop
+
+on:
+  push:
+    branches-ignore:
+      - master
+  pull_request:
+    branches-ignore:
+      - master
+  workflow_dispatch:
+
+jobs:
+  Develop:
+    name: Develop
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache .nuke/temp, ~/.nuget/packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            .nuke/temp
+            ~/.nuget/packages
+          key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
+      - name: Run './build/build.cmd'
+        run: ./build/build.cmd --root ./build
+        env:
+          GitHubToken: ${{ secrets.GITHUB_TOKEN }}
