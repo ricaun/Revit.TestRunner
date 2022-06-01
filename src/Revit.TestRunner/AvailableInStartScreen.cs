@@ -8,7 +8,7 @@ namespace Revit.TestRunner
     /// </summary>
     public class AvailableInStartScreen : IExternalCommandAvailability
     {
-        public bool IsCommandAvailable( UIApplication applicationData, CategorySet selectedCategories )
+        public bool IsCommandAvailable(UIApplication applicationData, CategorySet selectedCategories)
         {
             return applicationData.ActiveUIDocument == null;
         }

@@ -99,10 +99,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="$(Configuration.Contains('Debug'))">
     <Revision>$([MSBuild]::Divide($([System.DateTime]::get_Now().get_TimeOfDay().get_TotalSeconds()), 4).ToString('F0'))</Revision>
-    <Version>$(Version).$(Revision)</Version>
-    <PackageAssemblyVersion>.Dev.$(Version)</PackageAssemblyVersion>
+    <PackageAssemblyVersion>.Dev.$(Version).$(Revision)</PackageAssemblyVersion>
   </PropertyGroup>
 
+  <!--
+-->
   <PropertyGroup>
     <Company>Geberit Verwaltungs AG</Company>
     <Authors>Geberit Verwaltungs AG</Authors>
@@ -116,6 +117,10 @@
     <Copyright>Copyright © 2002-$(CopyrightYears), $(Company).</Copyright>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <AssemblyName>$(PackageId)$(PackageAssemblyVersion)</AssemblyName>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="Revit_All_Main_Versions_API_x64" Version="$(RevitVersion).*" IncludeAssets="build; compile" PrivateAssets="All" />
@@ -124,41 +129,13 @@
     <PackageReference Include="nunit.engine" Version="3.15.0" />
     <PackageReference Include="nunit.engine.api" Version="3.15.0" />
   </ItemGroup>
-
   <!--
   <ItemGroup>
-    <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.engine, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.Engine.3.12.0\lib\net20\nunit.engine.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.Engine.3.12.0\lib\net20\nunit.engine.api.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.engine.core, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.Engine.3.12.0\lib\net20\nunit.engine.core.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.13.2.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.13.2\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
+  <Compile Include="..\AssemblyInfo\AssemblyInfo.Version.cs" Link="Properties\AssemblyInfo.Version.cs" />
+    <Compile Include="..\AssemblyInfo\AssemblyInfo.Global.cs" Link="Properties\AssemblyInfo.Global.cs" />
   </ItemGroup>
-  -->
+-->
+
   <ItemGroup>
     <None Include="Local.log4net">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

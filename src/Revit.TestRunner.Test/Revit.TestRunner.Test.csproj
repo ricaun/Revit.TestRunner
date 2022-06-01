@@ -8,10 +8,10 @@
     <Platforms>x64</Platforms>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+  <PropertyGroup Condition="$(Configuration.Contains('Debug'))">
     <OutputPath>..\bin\Test</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+  <PropertyGroup Condition="!$(Configuration.Contains('Debug'))">
     <OutputPath>..\bin\Test</OutputPath>
   </PropertyGroup>
   <ItemGroup>

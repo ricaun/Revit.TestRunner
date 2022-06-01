@@ -11,13 +11,13 @@
   <PropertyGroup>
     <ApplicationIcon>Testing.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+  <PropertyGroup Condition="$(Configuration.Contains('Debug'))">
     <OutputPath>..\Revit.TestRunner\bin\Debug\Client\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+  <PropertyGroup Condition="!$(Configuration.Contains('Debug'))">
     <OutputPath>..\Revit.TestRunner\bin\Release\Client\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DefineConstants>TRACE</DefineConstants>

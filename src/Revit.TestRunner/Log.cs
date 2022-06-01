@@ -18,7 +18,7 @@ namespace Revit.TestRunner
         #endregion
 
         #region Properties
-        private static ILog Logger => sLogger ?? ( sLogger = SetupLog() );
+        private static ILog Logger => sLogger ?? (sLogger = SetupLog());
 
         public static string LogDirectory
         {
@@ -26,83 +26,88 @@ namespace Revit.TestRunner
             {
                 var appenders = Logger.Logger.Repository.GetAppenders();
 
-                foreach( IAppender appender in appenders ) {
-                    if( appender is RollingFileAppender fileAppender ) {
-                        return Path.GetDirectoryName( fileAppender.File );
+                foreach (IAppender appender in appenders)
+                {
+                    if (appender is RollingFileAppender fileAppender)
+                    {
+                        return Path.GetDirectoryName(fileAppender.File);
                     }
                 }
                 return "-";
             }
         }
 
-        public static string LogFilePath => Path.Combine( LogDirectory, LogFileName );
+        public static string LogFilePath => Path.Combine(LogDirectory, LogFileName);
         #endregion
 
         #region Methods
 
-        public static void Debug( object message )
+        public static void Debug(object message)
         {
-            Logger.Debug( message );
+            Logger.Debug(message);
         }
 
-        public static void Info( object message )
+        public static void Info(object message)
         {
-            Logger.Info( message );
+            Logger.Info(message);
         }
 
-        public static void Warn( object message )
+        public static void Warn(object message)
         {
-            Logger.Warn( message );
+            Logger.Warn(message);
         }
 
-        public static void Error( object message )
+        public static void Error(object message)
         {
-            Logger.Error( message );
+            Logger.Error(message);
         }
 
-        public static void Error( object message, Exception exception )
+        public static void Error(object message, Exception exception)
         {
-            Logger.Error( message, exception );
+            Logger.Error(message, exception);
         }
 
 
         private static ILog SetupLog()
         {
             string bin = Assembly.GetExecutingAssembly().CodeBase;
-            bin = bin.Replace( @"file:///", string.Empty );
-            bin = Path.GetDirectoryName( bin );
+            bin = bin.Replace(@"file:///", string.Empty);
+            bin = Path.GetDirectoryName(bin);
 
-            string logFile = Path.Combine( bin, LogFileName );
+            string logFile = Path.Combine(bin, LogFileName);
+            try
+            {
+                LogManager.CreateRepository(RepositoryName);
+                Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository(RepositoryName);
 
-            LogManager.CreateRepository( RepositoryName );
-            Hierarchy hierarchy = (Hierarchy)LogManager.GetRepository( RepositoryName );
+                PatternLayout patternLayout = new PatternLayout();
+                patternLayout.ConversionPattern = "%date [%thread] %-5level %logger - %message%newline";
+                patternLayout.ActivateOptions();
 
-            PatternLayout patternLayout = new PatternLayout();
-            patternLayout.ConversionPattern = "%date [%thread] %-5level %logger - %message%newline";
-            patternLayout.ActivateOptions();
+                RollingFileAppender roller = new RollingFileAppender();
+                roller.AppendToFile = true;
+                roller.File = logFile;
+                roller.Layout = patternLayout;
+                roller.MaxSizeRollBackups = 5;
+                roller.MaximumFileSize = "6MB";
+                roller.RollingStyle = RollingFileAppender.RollingMode.Size;
+                roller.StaticLogFileName = true;
+                roller.ActivateOptions();
+                hierarchy.Root.AddAppender(roller);
 
-            RollingFileAppender roller = new RollingFileAppender();
-            roller.AppendToFile = true;
-            roller.File = logFile;
-            roller.Layout = patternLayout;
-            roller.MaxSizeRollBackups = 5;
-            roller.MaximumFileSize = "6MB";
-            roller.RollingStyle = RollingFileAppender.RollingMode.Size;
-            roller.StaticLogFileName = true;
-            roller.ActivateOptions();
-            hierarchy.Root.AddAppender( roller );
+                ConsoleAppender console = new ConsoleAppender();
+                console.Layout = patternLayout;
+                console.ActivateOptions();
+                hierarchy.Root.AddAppender(console);
 
-            ConsoleAppender console = new ConsoleAppender();
-            console.Layout = patternLayout;
-            console.ActivateOptions();
-            hierarchy.Root.AddAppender( console );
+                hierarchy.Root.Level = log4net.Core.Level.Debug;
+                hierarchy.Configured = true;
+            }
+            catch { }
 
-            hierarchy.Root.Level = log4net.Core.Level.Debug;
-            hierarchy.Configured = true;
+            ILog log = LogManager.GetLogger(RepositoryName, typeof(Log));
 
-            ILog log = LogManager.GetLogger( RepositoryName, typeof( Log ) );
-
-            if( log == null ) throw new NullReferenceException( "Log not initialized!" );
+            if (log == null) throw new NullReferenceException("Log not initialized!");
 
             return log;
         }

@@ -9,6 +9,8 @@ using Revit.TestRunner.Server;
 
 namespace Revit.TestRunner
 {
+    internal class ConsoleAttribute : Attribute { }
+    [Console]
     /// <summary>
     /// Entreance object for the Revit.TestRunner addin in Revit.
     /// </summary>
@@ -22,9 +24,10 @@ namespace Revit.TestRunner
             Log.Info($"{Environment.OSVersion}, NetFX {Environment.Version}");
             Log.Debug($"Log Directory '{Log.LogDirectory}'");
             Log.Debug($"CurrentAppDomain.ApplicationBase '{AppDomain.CurrentDomain.SetupInformation.ApplicationBase}'");
+#if DEBUG
 
+#else
             RibbonPanel ribbonPanel = application.CreateRibbonPanel("Testing");
-
             string command = typeof(RunnerCommand).FullName;
 
             PushButtonData buttonData = new PushButtonData(command, "Open Runner", Assembly.GetExecutingAssembly().Location, command)
@@ -36,6 +39,7 @@ namespace Revit.TestRunner
             };
 
             ribbonPanel.AddItem(buttonData);
+#endif
 
             mController = new RunnerController();
             mController.Start(application);
@@ -45,7 +49,7 @@ namespace Revit.TestRunner
 
         public Result OnShutdown(UIControlledApplication application)
         {
-            mController.Stop();
+            mController?.Stop();
             return Result.Succeeded;
         }
 

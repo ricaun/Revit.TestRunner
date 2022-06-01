@@ -6,14 +6,14 @@
     <Platforms>x64</Platforms>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <OutputPath>bin\Debug\Client\</OutputPath>
+  <PropertyGroup Condition="$(Configuration.Contains('Debug'))">
+    <OutputPath>..\Revit.TestRunner\bin\Debug\Client\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <OutputPath>bin\Release\Client\</OutputPath>
+  <PropertyGroup Condition="!$(Configuration.Contains('Debug'))">
+    <OutputPath>..\Revit.TestRunner\bin\Release\Client\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <DebugType>none</DebugType>
