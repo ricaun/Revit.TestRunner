@@ -160,9 +160,6 @@
   </ItemGroup>
   -->
   <ItemGroup>
-
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Local.log4net">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -171,7 +168,7 @@
     <Resource Include="Commands\Pic\Testing.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Revit.TestRunner.Shared\Revit.TestRunner.Shared.csproj"/>
+    <ProjectReference Include="..\Revit.TestRunner.Shared\Revit.TestRunner.Shared.csproj" />
   </ItemGroup>
 
 </Project>
